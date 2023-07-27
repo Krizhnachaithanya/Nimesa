@@ -2,47 +2,41 @@ import requests
 import json
 import functools
 
-
-def isOfDate(x, date):
+def isOfDate(x,date):
     return x['dt_txt'].startswith(date)
-
-
+    
 def fetchData():
-    response = requests.get(
-        "https://samples.openweathermap.org/data/2.5/forecast/hourly?q=London,us&appid=b6907d289e10d714a6e88b30761fae22")
+    response = requests.get("https://samples.openweathermap.org/data/2.5/forecast/hourly?q=London,us&appid=b6907d289e10d714a6e88b30761fae22")
     data = response.text
     data = json.loads(data)['list']
     return data
 
-
-def printAverage(filtered, key1, key2, req):
+def printAverage(filtered,key1,key2,req):
     total_data = len(filtered)
     ans = 0
     for item in filtered:
         ans += item[key1][key2]
     ans /= total_data
-    print(req, ans)
-
+    print(req,ans)
 
 def processRequest(selection):
     date = input("Enter date in YYYY-MM-DD format\n")
-    filtered = list(filter(lambda x: isOfDate(x, date), data))
+    filtered = list(filter(lambda x:isOfDate(x,date),data))
     total_data = len(filtered)
     if total_data == 0:
         print("No data for this date")
         return
-
+   
     if selection == 1:
-        printAverage(filtered, 'main', 'temp', 'temperature')
+        printAverage(filtered,'main','temp','temperature')
     elif selection == 2:
-        printAverage(filtered, 'wind', 'speed', 'wind speed')
+         printAverage(filtered,'wind','speed','wind speed')
     elif selection == 3:
-        printAverage(filtered, 'main', 'pressure', 'pressure')
+        printAverage(filtered,'main','pressure','pressure')
 
-
-if __name__ == " __main__":
+if __name__ == "__main__":
     data = fetchData()
-
+    
     take_input = True
     while take_input:
         selection = int(input())
